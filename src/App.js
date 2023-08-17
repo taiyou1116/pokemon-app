@@ -1,23 +1,42 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import { getAllPokemon, getPokemon } from './utils/pokemon';
 
 function App() {
+  const initialURL = "https://pokeapi.co/api/v2/pokemon";
+  const [loading, setLoading] = useState(true);
+  const [pokemonData, setPokemonData] = useState();
+
+  useEffect(() => {
+    const fetchPokemonData = async () => {
+      // すべてのポケモンを取得
+      let res = await getAllPokemon(initialURL);
+      // 各ポケモンの詳細なデータを取得
+      loadPokemon(res.results);
+      setLoading(false);
+    }
+    fetchPokemonData();
+  }, []);
+
+  const loadPokemon = async (data) => {
+    let _pokemonData = await Promise.all(
+      data.map((pokemon) => {
+        let pokemonRecord = getPokemon(pokemon.url);
+        return pokemonRecord;
+      })
+    );
+    setPokemonData(_pokemonData);
+  }
+
+  console.log(pokemonData);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    {loading ? (
+      <h1>ロード中</h1>
+    ) : (
+      <h1>ポケモンデータを取得しました</h1>
+    )}
     </div>
   );
 }
