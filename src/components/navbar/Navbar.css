@@ -1,0 +1,15 @@
+nav {
+  background-color: orange;
+  color: white;
+  height: 65px;
+  font-size: 25px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pokemonImg {
+  width: 30;
+  height: 30;
+}
